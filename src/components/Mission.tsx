@@ -1,6 +1,6 @@
-
 import React, { useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Target, Rocket, Eye, Users, FileText, Lightbulb, Award, Globe } from 'lucide-react';
 
 const Mission = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -30,7 +30,7 @@ const Mission = () => {
   }, []);
 
   return (
-    <section id="mission" ref={sectionRef} className="py-20 relative overflow-hidden">
+    <section id="mission" ref={sectionRef} className="py-20 relative overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6 animate-on-scroll">
@@ -45,8 +45,8 @@ const Mission = () => {
           {/* Mission Card */}
           <Card className="glass-effect border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 animate-on-scroll">
             <CardHeader className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">🎯</span>
+              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <Target className="w-8 h-8 text-white" />
               </div>
               <CardTitle className="text-xl font-bold text-blue-900">Mission</CardTitle>
             </CardHeader>
@@ -60,8 +60,8 @@ const Mission = () => {
           {/* But Card */}
           <Card className="glass-effect border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 animate-on-scroll">
             <CardHeader className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">🚀</span>
+              <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <Rocket className="w-8 h-8 text-white" />
               </div>
               <CardTitle className="text-xl font-bold text-green-900">But</CardTitle>
             </CardHeader>
@@ -75,8 +75,8 @@ const Mission = () => {
           {/* Vision Card */}
           <Card className="glass-effect border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 animate-on-scroll">
             <CardHeader className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">👁️</span>
+              <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <Eye className="w-8 h-8 text-white" />
               </div>
               <CardTitle className="text-xl font-bold text-purple-900">Vision</CardTitle>
             </CardHeader>
@@ -88,21 +88,47 @@ const Mission = () => {
           </Card>
         </div>
 
-        {/* Stats Section */}
+        {/* Stats Section - Professionnelle avec icônes */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-          {[
-            { number: "Des", label: "Projets accompagnés", color: "from-blue-500 to-cyan-500" },
-            { number: "Plusieurs", label: "Partenaires", color: "from-green-500 to-emerald-500" },
-            { number: "100+", label: "Chercheurs", color: "from-purple-500 to-violet-500" },
-            { number: "Des", label: "Publications", color: "from-orange-500 to-red-500" }
-          ].map((stat, index) => (
-            <div key={index} className="text-center animate-on-scroll">
-              <div className={`text-4xl md:text-5xl font-bold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent mb-2`}>
-                {stat.number}
+          <div className="text-center animate-on-scroll">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <Lightbulb className="w-6 h-6 text-blue-600" />
+              <div className={`text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent`}>
+                50+
               </div>
-              <div className="text-gray-600 font-medium">{stat.label}</div>
             </div>
-          ))}
+            <div className="text-gray-600 font-medium">Projets accompagnés</div>
+          </div>
+
+          <div className="text-center animate-on-scroll">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <Users className="w-6 h-6 text-green-600" />
+              <div className={`text-3xl md:text-4xl font-bold bg-gradient-to-r from-green-500 to-emerald-500 bg-clip-text text-transparent`}>
+                25+
+              </div>
+            </div>
+            <div className="text-gray-600 font-medium">Partenaires</div>
+          </div>
+
+          <div className="text-center animate-on-scroll">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <Award className="w-6 h-6 text-purple-600" />
+              <div className={`text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-500 to-violet-500 bg-clip-text text-transparent`}>
+                100+
+              </div>
+            </div>
+            <div className="text-gray-600 font-medium">Chercheurs</div>
+          </div>
+
+          <div className="text-center animate-on-scroll">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <FileText className="w-6 h-6 text-orange-600" />
+              <div className={`text-3xl md:text-4xl font-bold bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent`}>
+                150+
+              </div>
+            </div>
+            <div className="text-gray-600 font-medium">Publications</div>
+          </div>
         </div>
       </div>
 

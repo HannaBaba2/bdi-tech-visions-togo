@@ -13,7 +13,8 @@ import {
   Phone, 
   Mail, 
   Download,
-  AlertCircle
+  AlertCircle,
+  ExternalLink
 } from 'lucide-react';
 
 // Types pour les données de formation
@@ -40,6 +41,7 @@ export type TrainingDetails = {
     email: string;
     maxParticipants: number;
   };
+  registrationUrl?: string; // ✅ URL d'inscription optionnelle (Google Forms, etc.)
 };
 
 export type TrainingModalProps = {
@@ -63,6 +65,17 @@ const TrainingModal: React.FC<TrainingModalProps> = ({
   details
 }) => {
   if (!isOpen) return null;
+
+  // ✅ Fonction pour gérer l'inscription (Google Forms ou téléphone)
+  const handleRegistration = () => {
+    if (details.registrationUrl) {
+      // Ouvrir le formulaire Google Forms dans un nouvel onglet
+      window.open(details.registrationUrl, '_blank', 'noopener,noreferrer');
+    } else {
+      // Fallback : ouvrir le téléphone
+      window.location.href = `tel:${details.contact.phone}`;
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 modal-appear">
@@ -220,31 +233,35 @@ const TrainingModal: React.FC<TrainingModalProps> = ({
           {/* Boutons d'action */}
           <div className="flex flex-col sm:flex-row gap-3 pt-2">
             <Button 
-              className={`flex-1 bg-gradient-to-r ${color} hover:scale-105 transition-transform py-6 text-lg font-semibold`}
-              onClick={() => window.location.href = `tel:${details.contact.phone}`}
+              className={`flex-1 bg-gradient-to-r ${color} hover:scale-105 transition-transform py-6 text-lg font-semibold inline-flex items-center justify-center gap-2`}
+              onClick={handleRegistration}
             >
-              <Phone className="w-5 h-5 mr-2" />
-              S'inscrire maintenant
+              {details.registrationUrl ? (
+                <>
+                  S'inscrire maintenant
+                  <ExternalLink className="w-4 h-4" />
+                </>
+              ) : (
+                <>
+                  <Phone className="w-5 h-5" />
+                  S'inscrire maintenant
+                </>
+              )}
             </Button>
             <Button 
               variant="outline"
-              className="flex-1 hover:scale-105 transition-transform py-6 text-lg font-semibold"
+              className="flex-1 hover:scale-105 transition-transform py-6 text-lg font-semibold inline-flex items-center justify-center gap-2"
               onClick={onDownload}
             >
-              <Download className="w-5 h-5 mr-2" />
-                    Télécharger l'affiche
+              <Download className="w-5 h-5" />
+              Télécharger l'affiche
             </Button>
           </div>
 
         </div>
       </div>
     </div>
-
-
-    
   );
 };
 
 export default TrainingModal;
-
-

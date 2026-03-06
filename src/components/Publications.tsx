@@ -140,45 +140,56 @@ const Publications = () => {
       }
     },
     {
-      id: 2,
-      title: "Formation : Les Bases du Développement Web pour Débutants",
-      authors: "BDI - Bloc Des Innovateurs",
-      journal: "Formation Pratique",
-      year: "2026",
-      type: "Formation",
-      color: "from-blue-500 to-cyan-500",
-      isTraining: true,
-      posterUrl: "/PHOTOS/bdi-formation-web.jpeg",
-      details: {
-        theme: "LES BASES DU DÉVELOPPEMENT WEB POUR LES DÉBUTANTS",
-        description: "Nous lançons une formation en développement web destinée aux débutants, accessible à toute personne motivée, sans prérequis technique. L'objectif est de vous initier aux bases essentielles du développement web et de vous permettre de concevoir vos premières pages web de manière autonome.",
-        program: [
-          "Introduction au développement web",
-          "Bases du HTML et CSS",
-          "Notions fondamentales de JavaScript",
-          "Création de pages web simples et responsives",
-          "Bonnes pratiques et outils du développeur"
-        ],
-        objectives: [
-          "Comprendre le fonctionnement du web",
-          "Acquérir les bases du développement front-end",
-          "Être capable de créer un site web simple",
-          "Poser des bases solides pour aller vers des niveaux plus avancés"
-        ],
-        targetAudience: [
-          "Débutants",
-          "Étudiants, professionnels ou toute personne souhaitant se reconvertir",
-          "Passionnés du numérique"
-        ],
-        sessions: [
-          { id: 1, dates: "20-21 Mars 2026", time: "19h-20h GMT", format: "En ligne & en présentiel" },
-          { id: 2, dates: "23-25 Mars 2026", time: "14h-17h GMT", format: "En ligne & en présentiel" }
-        ],
-        pricing: { inscription: "2000 FCFA", participation: "20 000 FCFA" },
-        contact: { phone: "228 91311214", email: "blocdesinnovateurs@gmail.com", maxParticipants: 10 }
-      }
-    },
+        id: 2,
+        title: "Formation : Les Bases du Développement Web pour Débutants",
+        authors: "BDI - Bloc Des Innovateurs",
+        journal: "Formation Pratique",
+        year: "2026",
+        type: "Formation",
+        color: "from-blue-500 to-cyan-500",
+        isTraining: true,
+        posterUrl: "/PHOTOS/bdi-formation-web.jpeg",
+        details: {
+          theme: "LES BASES DU DÉVELOPPEMENT WEB POUR LES DÉBUTANTS",
+          description: "Nous lançons une formation en développement web destinée aux débutants, accessible à toute personne motivée, sans prérequis technique. L'objectif est de vous initier aux bases essentielles du développement web et de vous permettre de concevoir vos premières pages web de manière autonome.",
+          program: [
+            "Introduction au développement web",
+            "Bases du HTML et CSS",
+            "Notions fondamentales de JavaScript",
+            "Création de pages web simples et responsives",
+            "Bonnes pratiques et outils du développeur"
+          ],
+          objectives: [
+            "Comprendre le fonctionnement du web",
+            "Acquérir les bases du développement front-end",
+            "Être capable de créer un site web simple",
+            "Poser des bases solides pour aller vers des niveaux plus avancés"
+          ],
+          targetAudience: [
+            "Débutants",
+            "Étudiants, professionnels ou toute personne souhaitant se reconvertir",
+            "Passionnés du numérique"
+          ],
+          sessions: [
+            { id: 1, dates: "20-21 Mars 2026", time: "19h-20h GMT", format: "En ligne & en présentiel" },
+            { id: 2, dates: "23-25 Mars 2026", time: "14h-17h GMT", format: "En ligne & en présentiel" }
+          ],
+          pricing: { 
+            inscription: "2000 FCFA", 
+            participation: "20 000 FCFA" 
+          },
+          contact: { 
+            phone: "228 91311214", 
+            email: "blocdesinnovateurs@gmail.com", 
+            maxParticipants: 10 
+          },
+          // ✅ AJOUT CORRECT : registrationUrl DANS details
+          registrationUrl: "https://docs.google.com/forms/d/e/1FAIpQLSdXl5Rde-uFdUk-TIt5FdMcq9TmweIwv2pq2XITWAYCHYMcKg/viewform?usp=dialog"
+        }
+      },    
+      
     {
+
       id: 3,
       title: "L'Innovation Technologique au Togo : État des Lieux et Perspectives",
       authors: "Dr. Amina KOUADIO, Prof. Kwame ASANTE",

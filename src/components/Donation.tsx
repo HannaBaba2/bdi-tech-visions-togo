@@ -2,6 +2,22 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { 
+  Gift, 
+  User, 
+  Mail, 
+  Coins, 
+  MessageCircle, 
+  Rocket, 
+  GraduationCap, 
+  Laptop, 
+  FlaskConical,
+  CheckCircle,
+  Heart,
+  Sparkles,
+  ArrowRight,
+  Shield
+} from 'lucide-react';
 
 const Donation = () => {
   const [selectedAmount, setSelectedAmount] = useState(50);
@@ -19,7 +35,7 @@ const Donation = () => {
   const handleDonation = () => {
     const amount = customAmount ? parseFloat(customAmount) : selectedAmount;
     if (amount >= MIN_AMOUNT && donorInfo.name && donorInfo.email) {
-      const message = `🎁 *Nouveau Don reçu !*\n\n👤 Nom : ${donorInfo.name}\n📧 Email : ${donorInfo.email}\n💶 Montant : ${amount.toLocaleString()} FCFA\n💬 Message : ${donorInfo.message || 'Aucun'}\n\n🚀 Vive l’innovation togolaise !`;
+      const message = `🎁 *Nouveau Don reçu !*\n\n👤 Nom : ${donorInfo.name}\n📧 Email : ${donorInfo.email}\n💶 Montant : ${amount.toLocaleString()} FCFA\n💬 Message : ${donorInfo.message || 'Aucun'}\n\n🚀 Vive l'innovation togolaise !`;
       const whatsappUrl = `https://wa.me/22891120671?text=${encodeURIComponent(message)}`;
 
       toast({
@@ -64,71 +80,92 @@ const Donation = () => {
 
         <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
           <div className="space-y-8">
+            {/* Impact Cards */}
             <Card className="glass-effect border-0 shadow-xl">
               <CardHeader>
-                <CardTitle className="text-2xl font-bold text-gray-800">Impact de vos dons</CardTitle>
+                <CardTitle className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+                  <Sparkles className="w-6 h-6 text-blue-600" />
+                  Impact de vos dons
+                </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-4">
                 {[
                   {
                     amount: "25 000 FCFA",
                     impact: "Formation d'un jeune entrepreneur",
-                    icon: "👨‍🎓",
+                    icon: GraduationCap,
                     color: "from-blue-500 to-cyan-500"
                   },
                   {
                     amount: "50 000 FCFA",
                     impact: "Kit de démarrage pour une startup",
-                    icon: "🚀",
+                    icon: Rocket,
                     color: "from-purple-500 to-pink-500"
                   },
                   {
                     amount: "100 000 FCFA",
                     impact: "Accompagnement d'un projet tech",
-                    icon: "💻",
+                    icon: Laptop,
                     color: "from-green-500 to-emerald-500"
                   },
                   {
                     amount: "250 000 FCFA",
                     impact: "Recherche et développement",
-                    icon: "🔬",
+                    icon: FlaskConical,
                     color: "from-orange-500 to-red-500"
                   }
-                ].map((item, index) => (
-                  <div key={index} className="flex items-center space-x-4 p-4 bg-white/50 rounded-xl hover:bg-white/70 transition-all duration-300">
-                    <div className={`w-12 h-12 bg-gradient-to-r ${item.color} rounded-xl flex items-center justify-center text-xl`}>
-                      {item.icon}
+                ].map((item, index) => {
+                  const Icon = item.icon;
+                  return (
+                    <div 
+                      key={index} 
+                      className="flex items-center space-x-4 p-4 bg-white/50 rounded-xl hover:bg-white/70 transition-all duration-300"
+                    >
+                      <div className={`w-12 h-12 bg-gradient-to-r ${item.color} rounded-xl flex items-center justify-center shadow-md`}>
+                        <Icon className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <div className="font-bold text-gray-800">{item.amount}</div>
+                        <div className="text-gray-600 text-sm">{item.impact}</div>
+                      </div>
                     </div>
-                    <div>
-                      <div className="font-bold text-gray-800">{item.amount}</div>
-                      <div className="text-gray-600">{item.impact}</div>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </CardContent>
             </Card>
 
+            {/* Pourquoi nous soutenir */}
             <Card className="glass-effect border-0 shadow-xl">
               <CardContent className="p-6">
-                <h3 className="text-xl font-bold text-gray-800 mb-4">Pourquoi nous soutenir ?</h3>
-                <ul className="space-y-3 text-gray-600">
-                  <li className="flex items-center space-x-3">
-                    <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                    <span>Développement de l'écosystème tech togolais</span>
-                  </li>
-                  <li className="flex items-center space-x-3">
-                    <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                    <span>Formation de la nouvelle génération d'innovateurs</span>
-                  </li>
-                  <li className="flex items-center space-x-3">
-                    <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
-                    <span>Recherche appliquée pour le développement durable</span>
-                  </li>
-                  <li className="flex items-center space-x-3">
-                    <span className="w-2 h-2 bg-orange-500 rounded-full"></span>
-                    <span>Création d'emplois et de valeur économique</span>
-                  </li>
+                <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                  <Heart className="w-5 h-5 text-red-500" />
+                  Pourquoi nous soutenir ?
+                </h3>
+                <ul className="space-y-3">
+                  {[
+                    { text: "Développement de l'écosystème tech togolais", color: "text-blue-500" },
+                    { text: "Formation de la nouvelle génération d'innovateurs", color: "text-green-500" },
+                    { text: "Recherche appliquée pour le développement durable", color: "text-purple-500" },
+                    { text: "Création d'emplois et de valeur économique", color: "text-orange-500" }
+                  ].map((item, index) => (
+                    <li key={index} className="flex items-center space-x-3 text-gray-600">
+                      <CheckCircle className={`w-4 h-4 ${item.color} flex-shrink-0`} />
+                      <span>{item.text}</span>
+                    </li>
+                  ))}
                 </ul>
+              </CardContent>
+            </Card>
+
+            {/* Sécurité des dons */}
+            <Card className="glass-effect border-0 shadow-xl">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-3 text-gray-600">
+                  <Shield className="w-5 h-5 text-green-600 flex-shrink-0" />
+                  <span className="text-sm">
+                    Vos dons sont sécurisés et contribuent directement à nos projets d'innovation
+                  </span>
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -136,11 +173,18 @@ const Donation = () => {
           {/* Formulaire de don */}
           <Card className="glass-effect border-0 shadow-2xl">
             <CardHeader>
-              <CardTitle className="text-2xl font-bold text-gray-800">Faire un don</CardTitle>
+              <CardTitle className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+                <Gift className="w-6 h-6 text-blue-600" />
+                Faire un don
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
+              {/* Sélection du montant */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-3">Montant du don</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                  <Coins className="w-4 h-4 text-green-600" />
+                  Montant du don
+                </label>
                 <div className="grid grid-cols-3 gap-3 mb-4">
                   {predefinedAmounts.map((amount) => (
                     <button
@@ -172,9 +216,13 @@ const Donation = () => {
                 />
               </div>
 
+              {/* Informations du donateur */}
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Nom complet *</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                    <User className="w-4 h-4 text-blue-600" />
+                    Nom complet *
+                  </label>
                   <input
                     type="text"
                     value={donorInfo.name}
@@ -184,7 +232,10 @@ const Donation = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Email *</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                    <Mail className="w-4 h-4 text-blue-600" />
+                    Email *
+                  </label>
                   <input
                     type="email"
                     value={donorInfo.email}
@@ -194,7 +245,10 @@ const Donation = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Message (optionnel)</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                    <MessageCircle className="w-4 h-4 text-blue-600" />
+                    Message (optionnel)
+                  </label>
                   <textarea
                     value={donorInfo.message}
                     onChange={(e) => setDonorInfo({ ...donorInfo, message: e.target.value })}
@@ -205,16 +259,21 @@ const Donation = () => {
                 </div>
               </div>
 
+              {/* Bouton de don */}
               <Button
                 onClick={handleDonation}
-                className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-4 rounded-xl text-lg font-semibold transition-all duration-300 hover:scale-105 shadow-lg"
+                className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-4 rounded-xl text-lg font-semibold transition-all duration-300 hover:scale-105 shadow-lg inline-flex items-center justify-center gap-2"
               >
+                <Heart className="w-5 h-5" />
                 Faire un don de {customAmount ? parseInt(customAmount).toLocaleString() : selectedAmount.toLocaleString()} FCFA
+                <ArrowRight className="w-4 h-4" />
               </Button>
 
-              <p className="text-xs text-gray-500 text-center">
-                Vos dons sont sécurisés et contribuent directement à nos projets d'innovation
-              </p>
+              {/* Note de sécurité */}
+              <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
+                <Shield className="w-3 h-3" />
+                <span>Paiement sécurisé • Impact direct</span>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -224,5 +283,3 @@ const Donation = () => {
 };
 
 export default Donation;
-
-
