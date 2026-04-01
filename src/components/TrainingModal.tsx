@@ -13,9 +13,8 @@ import {
   Phone, 
   Mail, 
   Download,
-  AlertCircle,
-  ExternalLink
-} from 'lucide-react';
+  AlertCircle
+} from 'lucide-react'; // ← ExternalLink supprimé
 
 // Types pour les données de formation
 export type TrainingSession = {
@@ -41,7 +40,7 @@ export type TrainingDetails = {
     email: string;
     maxParticipants: number;
   };
-  registrationUrl?: string; // ✅ URL d'inscription optionnelle (Google Forms, etc.)
+  registrationUrl?: string;
 };
 
 export type TrainingModalProps = {
@@ -66,16 +65,7 @@ const TrainingModal: React.FC<TrainingModalProps> = ({
 }) => {
   if (!isOpen) return null;
 
-  // ✅ Fonction pour gérer l'inscription (Google Forms ou téléphone)
-  const handleRegistration = () => {
-    if (details.registrationUrl) {
-      // Ouvrir le formulaire Google Forms dans un nouvel onglet
-      window.open(details.registrationUrl, '_blank', 'noopener,noreferrer');
-    } else {
-      // Fallback : ouvrir le téléphone
-      window.location.href = `tel:${details.contact.phone}`;
-    }
-  };
+  //  handleRegistration supprimé car plus utilisé (inscription se fait sur la page)
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 modal-appear">
@@ -230,27 +220,11 @@ const TrainingModal: React.FC<TrainingModalProps> = ({
             </div>
           </div>
 
-          {/* Boutons d'action */}
-          <div className="flex flex-col sm:flex-row gap-3 pt-2">
-            <Button 
-              className={`flex-1 bg-gradient-to-r ${color} hover:scale-105 transition-transform py-6 text-lg font-semibold inline-flex items-center justify-center gap-2`}
-              onClick={handleRegistration}
-            >
-              {details.registrationUrl ? (
-                <>
-                  S'inscrire maintenant
-                  <ExternalLink className="w-4 h-4" />
-                </>
-              ) : (
-                <>
-                  <Phone className="w-5 h-5" />
-                  S'inscrire maintenant
-                </>
-              )}
-            </Button>
+          {/*  Bouton d'action : UNIQUEMENT Télécharger l'affiche */}
+          <div className="pt-2">
             <Button 
               variant="outline"
-              className="flex-1 hover:scale-105 transition-transform py-6 text-lg font-semibold inline-flex items-center justify-center gap-2"
+              className="w-full hover:scale-105 transition-transform py-6 text-lg font-semibold inline-flex items-center justify-center gap-2"
               onClick={onDownload}
             >
               <Download className="w-5 h-5" />

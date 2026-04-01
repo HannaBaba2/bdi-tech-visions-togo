@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import TrainingModal from '@/components/TrainingModal';
-import { FileText, Download } from 'lucide-react';
+import { FileText, UserPlus } from 'lucide-react'; // ← UserPlus ajouté, Download supprimé
 
 const Publications = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -183,7 +183,7 @@ const Publications = () => {
             email: "blocdesinnovateurs@gmail.com", 
             maxParticipants: 10 
           },
-          // ✅ AJOUT CORRECT : registrationUrl DANS details
+          // ✅ registrationUrl DANS details
           registrationUrl: "https://docs.google.com/forms/d/e/1FAIpQLSdXl5Rde-uFdUk-TIt5FdMcq9TmweIwv2pq2XITWAYCHYMcKg/viewform?usp=dialog"
         }
       },    
@@ -281,15 +281,14 @@ const Publications = () => {
     document.body.style.overflow = 'unset';
   };
 
-  const downloadPoster = (pub: any) => {
-    if (pub.posterUrl) {
-      const link = document.createElement('a');
-      link.href = pub.posterUrl;
-      const extension = pub.posterUrl.split('.').pop() || 'jpeg';
-      link.download = `${pub.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.${extension}`;
-      link.click();
+  // ✅ Fonction pour gérer l'inscription (Google Forms ou fallback)
+  const handleRegistration = (pub: any) => {
+    if (pub.details?.registrationUrl) {
+      // Ouvrir le Google Forms dans un nouvel onglet
+      window.open(pub.details.registrationUrl, '_blank', 'noopener,noreferrer');
     } else {
-      alert("L'affiche sera bientôt disponible !");
+      // Fallback : ouvrir la modal si pas de lien d'inscription
+      openTraining(pub);
     }
   };
 
@@ -315,7 +314,7 @@ const Publications = () => {
                 className="publication-card glass-effect border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 group overflow-hidden"
               >
                 
-                {/*  Affiche pour les formations et événements */}
+                {/* Affiche pour les formations et événements */}
                 {publication.isTraining && publication.posterUrl && (
                   <div 
                     className="relative cursor-pointer bg-white border-b-4 border-blue-500" 
@@ -342,7 +341,7 @@ const Publications = () => {
                       }}
                     />
                     
-                    {/*  Badge dynamique selon la date */}
+                    {/* Badge dynamique selon la date */}
                     {status.label && (
                       <div className="absolute top-3 right-3">
                         <span 
@@ -361,7 +360,7 @@ const Publications = () => {
                   </div>
                 )}
 
-                {/*  Contenu de la carte */}
+                {/* Contenu de la carte */}
                 <CardHeader className={publication.isTraining ? "pt-4" : ""}>
                   <div className={`w-full h-2 bg-gradient-to-r ${publication.color} rounded-full mb-4`}></div>
                   <div className={`inline-block px-3 py-1 bg-gradient-to-r ${publication.color} text-white text-xs rounded-full mb-3 w-fit`}>
@@ -383,7 +382,10 @@ const Publications = () => {
                     <p className="text-sm text-gray-600">
                       <span className="font-semibold">Année:</span> {publication.year}
                     </p>
+                    
+                    {/* ✅ DEUX BOUTONS : Lire + S'inscrire (Google Forms) */}
                     <div className="flex space-x-2 pt-4">
+                      {/* Bouton Lire - Ouvre la modal */}
                       <Button 
                         size="sm" 
                         className={`bg-gradient-to-r ${publication.color} hover:scale-105 transition-transform text-xs ${
@@ -395,14 +397,16 @@ const Publications = () => {
                         <FileText className="w-3 h-3 mr-1" />
                         {status.status === 'past' ? 'Archivé' : 'Lire'}
                       </Button>
+                      
+                      {/* Bouton S'inscrire - Ouvre Google Forms si disponible */}
                       <Button 
                         size="sm" 
                         variant="outline" 
-                        className="hover:scale-105 transition-transform text-xs"
-                        onClick={() => downloadPoster(publication)}
+                        className="hover:scale-105 transition-transform text-xs inline-flex items-center gap-1.5"
+                        onClick={() => handleRegistration(publication)}
                       >
-                        <Download className="w-3 h-3 mr-1" />
-                        Télécharger
+                        <UserPlus className="w-3 h-3" />
+                        S'inscrire
                       </Button>
                     </div>
                   </div>
@@ -455,7 +459,7 @@ const Publications = () => {
         <TrainingModal
           isOpen={!!selectedTraining}
           onClose={closeTraining}
-          onDownload={() => downloadPoster(selectedTraining)}
+          onDownload={() => {}}
           title={selectedTraining.title}
           authors={selectedTraining.authors}
           color={selectedTraining.color}

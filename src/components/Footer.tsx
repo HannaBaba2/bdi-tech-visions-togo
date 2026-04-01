@@ -5,11 +5,10 @@ import {
   Globe, 
   MapPin, 
   Linkedin, 
-  Twitter, 
-  Facebook, 
-  Instagram,
+  UserPlus,
+  ExternalLink,
   ArrowUp
-} from 'lucide-react';
+} from 'lucide-react'; // ← UserPlus et ExternalLink ajoutés
 
 const Footer = () => {
   const scrollToSection = (sectionId: string) => {
@@ -22,6 +21,9 @@ const Footer = () => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  // ✅ Lien Google Forms pour devenir membre
+  const MEMBERSHIP_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdsUTgK9bT4g909ADR6bzlTCYGLp05cpHARmCQXabb55vAewQ/viewform";
 
   return (
     <footer className="bg-gradient-to-br from-gray-900 to-blue-900 text-white py-16">
@@ -139,12 +141,29 @@ const Footer = () => {
                 <span>+228 93 31 83 59</span>
               </a>
             </div>
-            <button
-              onClick={() => scrollToSection('don')}
-              className="mt-6 w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-full font-medium transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
-            >
-              Faire un Don
-            </button>
+            
+            {/* ✅ Boutons d'action : Devenir membre + Faire un Don */}
+            <div className="mt-6 space-y-3">
+              {/* Bouton Devenir membre */}
+              <a
+                href={MEMBERSHIP_FORM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-full hover:bg-emerald-100 hover:border-emerald-300 transition-all duration-300 hover:scale-105"
+              >
+                <UserPlus className="w-4 h-4" />
+                Devenir membre
+                <ExternalLink className="w-3 h-3 opacity-60" />
+              </a>
+              
+              {/* Bouton Faire un Don */}
+              <button
+                onClick={() => scrollToSection('don')}
+                className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-full font-medium transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+              >
+                Faire un Don
+              </button>
+            </div>
           </div>
         </div>
 

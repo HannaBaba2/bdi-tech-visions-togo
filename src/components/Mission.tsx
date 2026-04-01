@@ -114,7 +114,7 @@ const Mission = () => {
             <div className="flex items-center justify-center gap-2 mb-2">
               <Award className="w-6 h-6 text-purple-600" />
               <div className={`text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-500 to-violet-500 bg-clip-text text-transparent`}>
-                100+
+                10+
               </div>
             </div>
             <div className="text-gray-600 font-medium">Chercheurs</div>
@@ -124,7 +124,7 @@ const Mission = () => {
             <div className="flex items-center justify-center gap-2 mb-2">
               <FileText className="w-6 h-6 text-orange-600" />
               <div className={`text-3xl md:text-4xl font-bold bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent`}>
-                150+
+                20+
               </div>
             </div>
             <div className="text-gray-600 font-medium">Publications</div>

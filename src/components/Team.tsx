@@ -3,13 +3,11 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { 
   Mail, 
-  Linkedin, 
-  Globe, 
   Award, 
   Users, 
   Lightbulb,
   ArrowRight
-} from 'lucide-react';
+} from 'lucide-react'; 
 
 const Team = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -17,57 +15,35 @@ const Team = () => {
   const teamMembers = [
     {
       name: "BIASSA Palaqieme",
-      role: "Directeur Général",
+      role: "President",
       image: "/PHOTOS/BIASSA.jpg",
-      description: "Experte en innovation technologique",
+      description: "Expert en innovation technologique",
       gradient: "from-blue-500 to-purple-600",
-      email: "contact@bdi-togo.org",
-      linkedin: "#"
+      email: "marcelblak81@gmail.com",
     },
     {
-      name: "TCHEDRE G. Yves-Roland",
-      role: "Directeur de Recherche",
-      image: "/PHOTOS/TCHEDRE.jpg",
-      description: "Spécialiste en développement durable et technologies vertes",
-      gradient: "from-green-500 to-blue-600",
-      email: "recherche@bdi-togo.org",
-      linkedin: "#"
-    },
-    {
-      name: "KPEDROKU Cephas",
-      role: "Responsable Innovation",
+      name: "KPEDZROKU Cephas",
+      role: "Responsable Juridiques BD",
       image: "/PHOTOS/Cephas.jpg",
       description: "Passionné d'entrepreneuriat et d'accompagnement des startups",
       gradient: "from-purple-500 to-pink-600",
-      email: "innovation@bdi-togo.org",
-      linkedin: "#"
-    },
-    {
-      name: "AMENUTI Yao Félicité",
-      role: "Chef de Projet Tech",
-      image: "/PHOTOS/YAO.jpg",
-      description: "Expert en solutions technologiques innovantes",
-      gradient: "from-orange-500 to-red-600",
-      email: "projets@bdi-togo.org",
-      linkedin: "#"
+      email: "kpedzroku.ceph37@gmail.com",
     },
     {
       name: "KPANDJOM Koffi",
-      role: "Responsable Partenariats",
+      role: "Responsable De Transfert de Technologie",
       image: "/PHOTOS/Koffi.jpg",
       description: "Spécialiste en développement de collaborations stratégiques",
       gradient: "from-teal-500 to-cyan-600",
-      email: "partenariats@bdi-togo.org",
-      linkedin: "#"
+      email: "kpedzroku.ceph37@gmail.com",
     },
     {
       name: "HOUNSI Komlan Josué",
-      role: "Conseiller Scientifique",
+      role: "Responsable. Du Développement Durable ",
       image: "/PHOTOS/Josue.jpg",
       description: "Autorité reconnue en recherche scientifique appliquée",
       gradient: "from-indigo-500 to-blue-600",
-      email: "science@bdi-togo.org",
-      linkedin: "#"
+      email: "RESP. DU DÉVELOPPEMENT DURABLE ",
     }
   ];
 
@@ -154,7 +130,7 @@ const Team = () => {
                     {member.description}
                   </p>
 
-                  {/* Réseaux sociaux */}
+                  {/*  Réseaux sociaux : SEULEMENT Email */}
                   <div className="flex items-center justify-center gap-3 pt-4 border-t border-gray-200">
                     <a 
                       href={`mailto:${member.email}`}
@@ -162,20 +138,6 @@ const Team = () => {
                       aria-label="Email"
                     >
                       <Mail className="w-4 h-4" />
-                    </a>
-                    <a 
-                      href={member.linkedin}
-                      className="p-2 text-gray-500 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-all"
-                      aria-label="LinkedIn"
-                    >
-                      <Linkedin className="w-4 h-4" />
-                    </a>
-                    <a 
-                      href="#contact"
-                      className="p-2 text-gray-500 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-all"
-                      aria-label="Site web"
-                    >
-                      <Globe className="w-4 h-4" />
                     </a>
                   </div>
                 </div>
@@ -205,7 +167,7 @@ const Team = () => {
         {/* Stats équipe - Ajout professionnel */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16">
           <div className="text-center">
-            <div className="text-3xl font-bold text-blue-600 mb-1">6</div>
+            <div className="text-3xl font-bold text-blue-600 mb-1">4</div>
             <div className="text-sm text-gray-600">Membres clés</div>
           </div>
           <div className="text-center">

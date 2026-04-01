@@ -75,28 +75,7 @@ const Hero = () => {
             </Button>
           </div>
 
-          {/* Stats professionnelles - Responsive */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mt-8 sm:mt-16 animate-fade-in-up" style={{ animationDelay: '2s' }}>
-            <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 hover:shadow-lg transition-shadow border border-gray-200">
-              <div className="text-xl sm:text-2xl font-bold text-blue-600 mb-0.5 sm:mb-1">50+</div>
-              <div className="text-xs sm:text-sm text-gray-600">Projets accompagnés</div>
-            </div>
-
-            <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 hover:shadow-lg transition-shadow border border-gray-200">
-              <div className="text-xl sm:text-2xl font-bold text-purple-600 mb-0.5 sm:mb-1">500+</div>
-              <div className="text-xs sm:text-sm text-gray-600">Membres actifs</div>
-            </div>
-
-            <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 hover:shadow-lg transition-shadow border border-gray-200">
-              <div className="text-xl sm:text-2xl font-bold text-green-600 mb-0.5 sm:mb-1">25+</div>
-              <div className="text-xs sm:text-sm text-gray-600">Partenaires</div>
-            </div>
-
-            <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 hover:shadow-lg transition-shadow border border-gray-200">
-              <div className="text-xl sm:text-2xl font-bold text-orange-600 mb-0.5 sm:mb-1">15+</div>
-              <div className="text-xs sm:text-sm text-gray-600">Pays touchés</div>
-            </div>
-          </div>
+          
         </div>
       </div>
     </section>
