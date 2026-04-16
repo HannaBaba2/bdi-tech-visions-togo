@@ -2,28 +2,44 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { 
-  Briefcase, 
   Rocket, 
   Award, 
   Truck, 
   Leaf, 
   ArrowRight,
   Users,
-  CheckCircle
+  CheckCircle,
+  ExternalLink
 } from 'lucide-react';
 
 const Projects = () => {
   const [selectedProject, setSelectedProject] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
 
+  // ✅ Liens Digital Boost
+  const DIGITAL_BOOST_PDF = "https://drive.google.com/file/d/1prIWm2dvOTs8_eZFjf-CUC-ZTswDmDBN/view?usp=drivesdk";
+  const DIGITAL_BOOST_FORM = "https://docs.google.com/forms/d/e/1FAIpQLSdQRHcigN27QtpZ5A8v38UH5SQjSwk5JX08HqAEWmyGJ9A8qg/viewform?usp=header";
+
   const projects = [
+    // ✅ PROJET 1 : DIGITAL BOOST (description courte)
     {
-      title: "Fiscalité des entreprises tech",
-      description: "Communication sur les obligations fiscales pour les startups tech",
-      icon: Briefcase,
-      color: "from-blue-500 to-cyan-500",
-      details: "L'objectif est de faire la communication sur les obligations en terme fiscale pour la startup tech, en simplifiant les procédures et en accompagnant les entrepreneurs.",
-      impact: "200+ startups accompagnées"
+      title: "Digital Boost",
+      description: "Accélérez la transformation numérique de votre entreprise",
+      icon: Rocket,
+      color: "from-blue-600 to-purple-600",
+      details: "Digital Boost accompagne les TPE, startups et PME togolaises dans leur transformation numérique : formation, développement d'outils digitaux, gestion des réseaux sociaux et intégration de l'IA.",
+      impact: "20 entreprises • 6 mois • 10+ talents insérés",
+      isDigitalBoost: true,
+      pdfUrl: DIGITAL_BOOST_PDF,
+      formUrl: DIGITAL_BOOST_FORM,
+      benefits: [
+        "Formations pratiques en transformation numérique",
+        "Accompagnement personnalisé pour outils digitaux",
+        "IA appliquée à votre secteur",
+        "Gestion professionnelle des réseaux sociaux",
+        "Une solution numérique fonctionnelle livrée"
+      ],
+      target: "TPE, startups et PME togolaises à fort potentiel"
     },
     {
       title: "Entrepreneuriat et innovation",
@@ -82,6 +98,20 @@ const Projects = () => {
 
     return () => observer.disconnect();
   }, []);
+
+  // ✅ Fonction pour gérer le bouton "En savoir plus"
+  const handleLearnMore = (project: any) => {
+    if (project.isDigitalBoost && project.pdfUrl) {
+      window.open(project.pdfUrl, '_blank', 'noopener,noreferrer');
+    }
+  };
+
+  // ✅ Fonction pour gérer le bouton "Participer"
+  const handleParticipate = (project: any) => {
+    if (project.isDigitalBoost && project.formUrl) {
+      window.open(project.formUrl, '_blank', 'noopener,noreferrer');
+    }
+  };
 
   return (
     <section id="projets" ref={sectionRef} className="py-20 bg-gradient-to-br from-slate-50 to-blue-50">
@@ -147,18 +177,71 @@ const Projects = () => {
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 leading-relaxed mb-6 text-lg">
+                {/* ✅ Description courte - même taille que les autres projets */}
+                <p className="text-gray-600 leading-relaxed mb-4 text-lg">
                   {projects[selectedProject].details}
                 </p>
-                <div className="flex space-x-4">
-                  <Button className={`bg-gradient-to-r ${projects[selectedProject].color} hover:scale-105 transition-transform inline-flex items-center gap-2`}>
+                
+                {/* ✅ Digital Boost : Affiche les bénéfices (optionnel, caché par défaut si tu veux) */}
+                {projects[selectedProject].isDigitalBoost && (
+                  <div className="space-y-3 mb-6">
+                    <details className="group">
+                      <summary className="cursor-pointer text-sm font-medium text-blue-600 hover:text-blue-700 flex items-center gap-1">
+                        Voir les détails du programme ▾
+                      </summary>
+                      <div className="mt-3 space-y-2 text-sm text-gray-600">
+                        <h4 className="font-semibold text-gray-800">Ce que vous gagnez :</h4>
+                        <ul className="space-y-1">
+                          {projects[selectedProject].benefits?.map((benefit: string, idx: number) => (
+                            <li key={idx} className="flex items-start gap-2">
+                              <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 flex-shrink-0"></span>
+                              {benefit}
+                            </li>
+                          ))}
+                        </ul>
+                        {projects[selectedProject].target && (
+                          <p className="text-xs text-gray-500 italic mt-2">
+                             Public : {projects[selectedProject].target}
+                          </p>
+                        )}
+                      </div>
+                    </details>
+                  </div>
+                )}
+                
+                <div className="flex flex-col sm:flex-row gap-3">
+                  {/* ✅ Bouton "En savoir plus" → Ouvre le PDF pour Digital Boost */}
+                  <Button 
+                    className={`bg-gradient-to-r ${projects[selectedProject].color} hover:scale-105 transition-transform inline-flex items-center justify-center gap-2`}
+                    onClick={() => handleLearnMore(projects[selectedProject])}
+                  >
                     En savoir plus
-                    <ArrowRight className="w-4 h-4" />
+                    {projects[selectedProject].isDigitalBoost ? (
+                      <ExternalLink className="w-4 h-4" />
+                    ) : (
+                      <ArrowRight className="w-4 h-4" />
+                    )}
                   </Button>
-                  <Button variant="outline" className="hover:scale-105 transition-transform inline-flex items-center gap-2">
-                    <Users className="w-4 h-4" />
-                    Participer
-                  </Button>
+                  
+                  {/* ✅ Bouton "Participer" → Ouvre le formulaire pour Digital Boost */}
+                  {projects[selectedProject].isDigitalBoost ? (
+                    <Button 
+                      variant="outline" 
+                      className="hover:scale-105 transition-transform inline-flex items-center justify-center gap-2"
+                      onClick={() => handleParticipate(projects[selectedProject])}
+                    >
+                      <Users className="w-4 h-4" />
+                      Postuler au programme
+                    </Button>
+                  ) : (
+                    <Button 
+                      variant="outline" 
+                      className="hover:scale-105 transition-transform inline-flex items-center gap-2"
+                    >
+                      <Users className="w-4 h-4" />
+                      Participer
+                    </Button>
+                  )}
                 </div>
               </CardContent>
             </Card>

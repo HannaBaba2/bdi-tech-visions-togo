@@ -6,8 +6,10 @@ import Mission from '@/components/Mission';
 import Projects from '@/components/Projects';
 import Team from '@/components/Team';
 import Publications from '@/components/Publications';
+import Partners from '@/components/Partners';
 import Donation from '@/components/Donation';
 import Footer from '@/components/Footer';
+
 
 const Index = () => {
   return (
@@ -18,8 +20,10 @@ const Index = () => {
       <Projects />
       <Team />
       <Publications />
+      <Partners />
       <Donation />
       <Footer />
+      
     </div>
   );
 };

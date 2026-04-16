@@ -7,8 +7,9 @@ import {
   Linkedin, 
   UserPlus,
   ExternalLink,
-  ArrowUp
-} from 'lucide-react'; // ← UserPlus et ExternalLink ajoutés
+  ArrowUp,
+  Building2  // ← Ajouté pour l'icône Partenaires (optionnel)
+} from 'lucide-react';
 
 const Footer = () => {
   const scrollToSection = (sectionId: string) => {
@@ -85,7 +86,8 @@ const Footer = () => {
                 { name: 'Mission', id: 'mission' },
                 { name: 'Projets', id: 'projets' },
                 { name: 'Équipe', id: 'equipe' },
-                { name: 'Publications', id: 'publications' }
+                { name: 'Publications', id: 'publications' },
+                { name: 'Partenaires', id: 'partenaires' }  // ← AJOUTÉ
               ].map((item) => (
                 <li key={item.id}>
                   <button

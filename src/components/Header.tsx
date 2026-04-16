@@ -1,167 +1,234 @@
-import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { 
-  Home, 
-  Target, 
-  FolderKanban, 
-  Users, 
-  FileText, 
-  Heart, 
-  UserPlus, 
-  ExternalLink 
-} from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Heart, ExternalLink, ChevronDown, X } from 'lucide-react';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isPartnersDropdownOpen, setIsPartnersDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
+  // Fermer le dropdown Partenaires au clic extérieur
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsPartnersDropdownOpen(false);
+      }
     };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Gérer l'effet de scroll pour le header
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+  // ✅ Fermer tous les menus
+  const closeAllMenus = () => {
     setIsMobileMenuOpen(false);
+    setIsPartnersDropdownOpen(false);
+  };
+
+  // ✅ SCROLL ROBUSTE : window.location.hash + scrollIntoView
+  const scrollToSection = (sectionId: string) => {
+    closeAllMenus();
+    setTimeout(() => {
+      window.location.hash = `#${sectionId}`;
+      const el = document.getElementById(sectionId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 50);
   };
 
   const MEMBERSHIP_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdsUTgK9bT4g909ADR6bzlTCYGLp05cpHARmCQXabb55vAewQ/viewform";
 
-  // Items de navigation avec icônes
   const navItems = [
-    { id: 'accueil', label: 'Accueil', icon: Home },
-    { id: 'mission', label: 'Mission', icon: Target },
-    { id: 'projets', label: 'Projets', icon: FolderKanban },
-    { id: 'equipe', label: 'Équipe', icon: Users },
-    { id: 'publications', label: 'Publications', icon: FileText },
+    { id: 'accueil', label: 'Accueil' },
+    { id: 'mission', label: 'Mission' },
+    { id: 'projets', label: 'Projets' },
+    { id: 'equipe', label: 'Équipe' },
+    { id: 'publications', label: 'Publications' },
   ];
 
   return (
-    <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-      isScrolled ? 'glass-effect shadow-lg' : 'bg-transparent'
+    <header className={`fixed top-0 w-full z-50 transition-all duration-500 ${
+      isScrolled 
+        ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-100' 
+        : 'bg-transparent'
     }`}>
-      <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4">
-        <div className="flex items-center justify-between">
-          {/* Logo BDI - Responsive */}
-          <div className="flex items-center space-x-2 flex-shrink-0">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-md">
-              <span className="text-white font-bold text-lg sm:text-xl">B</span>
+      <div className="container mx-auto px-4 sm:px-6">
+        <div className="flex items-center justify-between h-16 sm:h-20">
+          
+          {/* ✅ Logo */}
+          <button 
+            onClick={() => scrollToSection('accueil')}
+            className="flex items-center space-x-3 group flex-shrink-0"
+          >
+            <div className="w-10 h-10 sm:w-11 sm:h-11 bg-gradient-to-br from-blue-600 via-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+              <span className="text-white font-bold text-xl sm:text-2xl">B</span>
             </div>
-            <span className="text-lg sm:text-xl font-bold text-gradient whitespace-nowrap">BDI</span>
-          </div>
+            <div className="flex flex-col items-start">
+              <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">BDI</span>
+              <span className="text-xs text-gray-500 -mt-0.5 hidden sm:block">Bloc Des Innovateurs</span>
+            </div>
+          </button>
 
-          {/* Desktop Navigation - Visible sur lg+ */}
-          <nav className="hidden lg:flex items-center space-x-0.5 xl:space-x-1">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className="inline-flex items-center gap-1 px-2.5 py-2 xl:px-3 text-xs sm:text-sm font-medium text-gray-700 hover:text-blue-600 transition-all rounded-lg hover:bg-blue-50"
-                >
-                  <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                  <span className="hidden xl:inline">{item.label}</span>
-                  <span className="xl:hidden">{item.label.slice(0, 3)}{item.label.length > 3 ? '.' : ''}</span>
-                </button>
-              );
-            })}
+          {/* ✅ Desktop Navigation */}
+          <nav className="hidden lg:flex items-center space-x-1">
+            {navItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => scrollToSection(item.id)}
+                className="px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-blue-600 transition-all duration-200 rounded-lg hover:bg-blue-50/50"
+              >
+                {item.label}
+              </button>
+            ))}
             
-            {/*  Bouton Devenir membre - Desktop */}
-            <a
-              href={MEMBERSHIP_FORM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hidden xl:inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg hover:bg-emerald-100 hover:border-emerald-300 hover:shadow-md transition-all flex-shrink-0"
+            {/* ✅ Partenaires Dropdown - Desktop */}
+            <div 
+              className="relative" 
+              ref={dropdownRef}
+              onMouseEnter={() => setIsPartnersDropdownOpen(true)}
+              onMouseLeave={() => setIsPartnersDropdownOpen(false)}
             >
-              <UserPlus className="w-3.5 h-3.5" />
-              <span className="hidden lg:inline">Devenir membre</span>
-              <span className="lg:hidden">Membre</span>
-              <ExternalLink className="w-3 h-3 opacity-60" />
-            </a>
+              <button className="group inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-blue-600 transition-all duration-200 rounded-lg hover:bg-blue-50/50">
+                <span>Partenaires</span>
+                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isPartnersDropdownOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {isPartnersDropdownOpen && (
+                <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 z-50">
+                  <div className="py-2">
+                    <button 
+                      onClick={() => scrollToSection('partenaires')}
+                      className="block w-full px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all text-left"
+                    >
+                      Voir les partenaires
+                    </button>
+                    <a 
+                      href={MEMBERSHIP_FORM_URL} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      onClick={closeAllMenus}
+                      className="w-full flex items-center justify-between px-4 py-3 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 transition-all border-t border-gray-100"
+                    >
+                      <span className="text-emerald-700 font-medium">Devenir partenaire</span>
+                      <ExternalLink className="w-3 h-3 opacity-60 ml-auto" />
+                    </a>
+                  </div>
+                </div>
+              )}
+            </div>
             
-            {/*  Bouton Faire un Don - Desktop */}
-            <a
-              href="#don"
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection('don');
-              }}
-              className="hidden xl:inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-white bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg hover:from-blue-600 hover:to-purple-700 hover:shadow-lg transition-all flex-shrink-0"
+            {/* ✅ Bouton Faire un Don - Desktop */}
+            <button
+              onClick={() => scrollToSection('don')}
+              className="ml-2 inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
             >
-              <Heart className="w-3.5 h-3.5" />
-              <span className="hidden lg:inline">Faire un Don</span>
-              <span className="lg:hidden">Don</span>
-            </a>
+              <Heart className="w-4 h-4" />
+              <span>Faire un Don</span>
+            </button>
           </nav>
 
-          {/* Mobile Menu Button - Responsive */}
+          {/* ✅ Mobile Menu Button */}
           <button 
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden p-2 flex-shrink-0"
-            aria-label="Menu"
+            className="lg:hidden p-2.5 rounded-lg hover:bg-gray-100 transition-colors"
+            aria-label={isMobileMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
           >
-            <div className="w-6 h-6 flex flex-col justify-around">
-              <span className={`block h-0.5 w-6 bg-gray-600 transition-transform ${isMobileMenuOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
-              <span className={`block h-0.5 w-6 bg-gray-600 transition-opacity ${isMobileMenuOpen ? 'opacity-0' : ''}`}></span>
-              <span className={`block h-0.5 w-6 bg-gray-600 transition-transform ${isMobileMenuOpen ? '-rotate-45 -translate-y-2' : ''}`}></span>
-            </div>
+            {isMobileMenuOpen ? (
+              <X className="w-6 h-6 text-gray-700" />
+            ) : (
+              <div className="w-6 h-5 flex flex-col justify-between">
+                <span className="block h-0.5 w-full bg-gray-700 rounded-full"></span>
+                <span className="block h-0.5 w-full bg-gray-700 rounded-full"></span>
+                <span className="block h-0.5 w-full bg-gray-700 rounded-full"></span>
+              </div>
+            )}
           </button>
         </div>
 
-        {/* Mobile Menu - Responsive */}
+        {/* ✅ Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden absolute top-full left-0 w-full glass-effect border-t border-white/20 shadow-lg max-h-[80vh] overflow-y-auto">
-            <nav className="flex flex-col p-3 sm:p-4">
-              {navItems.map((item, index) => {
-                const Icon = item.icon;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => scrollToSection(item.id)}
-                    className="inline-flex items-center gap-3 px-4 py-3.5 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all rounded-lg font-medium text-sm sm:text-base border-b border-gray-100 last:border-b-0"
-                    style={{ animationDelay: `${index * 50}ms` }}
-                  >
-                    <Icon className="w-5 h-5" />
-                    {item.label}
-                  </button>
-                );
-              })}
+          <div className="lg:hidden absolute top-full left-0 w-full bg-white border-t border-gray-100 shadow-2xl z-40">
+            <nav className="flex flex-col p-4 space-y-1 max-h-[70vh] overflow-y-auto">
               
-              {/* Séparateur */}
-              <div className="my-2 border-t border-gray-200"></div>
+              {/* ✅ Liens de navigation */}
+              {navItems.map((item) => (
+                <button 
+                  key={item.id} 
+                  onClick={() => scrollToSection(item.id)}
+                  className="block w-full px-4 py-3.5 text-gray-700 hover:text-blue-600 hover:bg-blue-50/50 transition-all rounded-xl font-medium text-left"
+                >
+                  {item.label}
+                </button>
+              ))}
               
-              {/*  Bouton Devenir membre - Mobile */}
-              <a
-                href={MEMBERSHIP_FORM_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 w-full px-4 py-3.5 text-sm font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg hover:bg-emerald-100 transition-all mb-2"
+              {/* ✅ Partenaires - Mobile */}
+              <div className="pt-2">
+                <button 
+                  onClick={() => setIsPartnersDropdownOpen(!isPartnersDropdownOpen)}
+                  className="w-full flex items-center justify-between px-4 py-3.5 text-gray-700 hover:text-blue-600 hover:bg-blue-50/50 transition-all rounded-xl font-medium text-left"
+                >
+                  <span>Partenaires</span>
+                  <ChevronDown className={`w-4 h-4 transition-transform ${isPartnersDropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
+                
+                {isPartnersDropdownOpen && (
+                  <div className="pl-4 pr-4 pb-2 space-y-1 mt-1">
+
+                    {/*
+                      ✅ FIX MOBILE "Voir les partenaires" :
+                      On scrolle D'ABORD, puis on ferme les menus après.
+                      Si on ferme avant, React re-rend et annule le scroll
+                      avant qu'il ait eu le temps de s'exécuter sur mobile.
+                    */}
+                    <button
+                      onClick={() => {
+                        const el = document.getElementById('partenaires');
+                        if (el) {
+                          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                        setTimeout(closeAllMenus, 50);
+                      }}
+                      className="block w-full px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all rounded-lg text-left"
+                    >
+                      Voir les partenaires
+                    </button>
+                    
+                    {/*
+                      ✅ FIX MOBILE "Devenir partenaire" :
+                      Vrai <a> avec target="_blank" — le navigateur mobile
+                      gère l'ouverture directement depuis l'événement utilisateur.
+                      window.open() dans un setTimeout est bloqué sur iOS/Android
+                      car considéré hors événement utilisateur direct.
+                    */}
+                    <a 
+                      href={MEMBERSHIP_FORM_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={closeAllMenus}
+                      className="flex items-center justify-between w-full px-4 py-3 text-sm text-emerald-700 hover:bg-emerald-50 transition-all rounded-lg"
+                    >
+                      <span>Devenir partenaire</span>
+                      <ExternalLink className="w-3 h-3 opacity-60" />
+                    </a>
+                  </div>
+                )}
+              </div>
+              
+              {/* ✅ Faire un Don - Mobile */}
+              <button 
+                onClick={() => scrollToSection('don')}
+                className="flex items-center justify-center gap-2 w-full px-4 py-3.5 mt-2 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-md"
               >
-                <UserPlus className="w-5 h-5" />
-                Devenir membre
-                <ExternalLink className="w-4 h-4 opacity-60" />
-              </a>
-              
-              {/*  Bouton Faire un Don - Mobile */}
-              <a
-                href="#don"
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection('don');
-                  setIsMobileMenuOpen(false);
-                }}
-                className="inline-flex items-center justify-center gap-2 w-full px-4 py-3.5 text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all shadow-md"
-              >
-                <Heart className="w-5 h-5" />
+                <Heart className="w-4 h-4" />
                 Faire un Don
-              </a>
+              </button>
             </nav>
           </div>
         )}
