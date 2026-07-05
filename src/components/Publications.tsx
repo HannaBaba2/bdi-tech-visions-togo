@@ -8,8 +8,10 @@ const Publications = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const [selectedTraining, setSelectedTraining] = useState<any>(null);
 
+  // ✅ Fonction CORRIGÉE pour vérifier le statut
   const getTrainingStatus = (publication: any) => {
-    if (!publication.isTraining || !publication.details?.sessions) {
+    // Accepte les formations ET les événements
+    if ((!publication.isTraining && !publication.isEvent) || !publication.details?.sessions) {
       return { status: 'normal', label: '', color: '' };
     }
 
@@ -24,16 +26,19 @@ const Publications = () => {
     sessions.forEach((session: any) => {
       const dateStr = session.dates.toLowerCase();
       
-      if (dateStr.includes('bientôt') || dateStr.includes('tba') || dateStr.includes('soon')) {
+      // Si texte spécial → futur
+      if (dateStr.includes('bientôt') || dateStr.includes('tba') || dateStr.includes('soon') || dateStr.includes('à définir')) {
         hasFutureSession = true;
         return;
       }
 
-      const dateMatch = dateStr.match(/(\d{1,2})[-\s](\d{1,2})?\s+(\w+)\s+(\d{4})/);
+      // Pattern pour dates : "15 Mai 2026" ou "20-21 Mars 2026"
+      const dateMatch = dateStr.match(/(\d{1,2})(?:[-\s](\d{1,2}))?\s+(\w+)\s+(\d{4})/);
+      
       if (dateMatch) {
         const day = parseInt(dateMatch[1]);
-        const monthName = dateMatch[3].toLowerCase();
-        const year = parseInt(dateMatch[4]);
+        const monthName = dateMatch[dateMatch.length - 2].toLowerCase();
+        const year = parseInt(dateMatch[dateMatch.length - 1]);
         
         const months: { [key: string]: number } = {
           'janvier': 0, 'jan': 0,
@@ -65,18 +70,22 @@ const Publications = () => {
           hasPastSession = true;
         }
       } else {
-        hasFutureSession = true; 
+        // Si la date ne peut pas être parsée → considéré comme passé
+        hasPastSession = true;
       }
     });
 
+    // Priorité : passé > en cours > futur
+    if (hasPastSession && !hasFutureSession && !hasCurrentSession) {
+      return { status: 'past', label: ' Passé', color: 'bg-gray-500' };
+    }
+    
     if (hasFutureSession || hasCurrentSession) {
       if (publication.isEvent) {
         return { status: 'coming-soon', label: ' Coming Soon', color: 'from-purple-600 to-pink-600' };
       } else {
         return { status: 'in-progress', label: ' En cours', color: 'bg-green-600' };
       }
-    } else if (hasPastSession) {
-      return { status: 'past', label: ' Passé', color: 'bg-gray-500' };
     }
 
     return { status: 'normal', label: '', color: '' };
@@ -117,11 +126,11 @@ const Publications = () => {
           "Passionnés d'innovation digitale"
         ],
         sessions: [
-          { id: 1, dates: "Bientôt annoncé", time: "TBA", format: "Présentiel & Virtuel" }
+          { id: 1, dates: "20-25 Juin 2026", time: "TBA", format: "Présentiel & Virtuel" }
         ],
         pricing: {
-          inscription: "Bientôt disponible",
-          participation: "Bientôt disponible"
+          inscription: "Terminé",
+          participation: "Terminé"
         },
         contact: {
           phone: "+228 90154745 / 99667676 / 93318359",
@@ -158,7 +167,6 @@ const Publications = () => {
           "Étudiants, professionnels ou toute personne souhaitant se reconvertir",
           "Passionnés du numérique"
         ],
-        // ✅ DATES MISES À JOUR (Mai 2026 - FUTUR)
         sessions: [
           { id: 1, dates: "15-16 Mai 2026", time: "19h-20h GMT", format: "En ligne & en présentiel" },
           { id: 2, dates: "20-22 Mai 2026", time: "14h-17h GMT", format: "En ligne & en présentiel" }
@@ -168,7 +176,7 @@ const Publications = () => {
           participation: "20 000 FCFA" 
         },
         contact: { 
-          phone: "228 91311214", 
+          phone: "+228 91311214", 
           email: "blocdesinnovateurs@gmail.com", 
           maxParticipants: 10 
         },
@@ -211,9 +219,8 @@ const Publications = () => {
           "Partenaires",
           "Sympathisants"
         ],
-        // ✅ DATE MISE À JOUR (Mai 2026 - FUTUR)
         sessions: [
-          { id: 1, dates: "15 Mai 2026", time: "10h00", format: "Présentiel" }
+          { id: 1, dates: "11 Avril 2026", time: "10h00", format: "Présentiel" }
         ],
         pricing: {
           inscription: "Gratuit",
@@ -237,14 +244,12 @@ const Publications = () => {
       posterUrl: "/PHOTOS/appel-candidature-digital-boost.jpeg",
       details: {
         theme: "Digital Boost - Transformation Numérique des TPME et Startups",
-        description: "Vous êtes une TPME ou startup togolaise ? Bénéficiez d'un accompagnement dans la transformation numérique de votre entreprise grâce au programme Digital Boost.",
+        description: "Digital Boost est un programme porté par l'association Bloc des Innovateurs, conçu pour accompagner les très petites entreprises (TPE), startups et PME togolaises à fort potentiel dans leur transformation numérique, tout en favorisant l'employabilité dans les métiers du digital.",
         program: [
-          "Formations pratiques en transformation numérique",
-          "Marketing digital et visibilité en ligne",
-          "Développement d'applications web et mobile",
-          "Intelligence artificielle appliquée",
-          "Gestion des réseaux sociaux",
-          "Création de solutions numériques fonctionnelles"
+          "Formation à la transformation numérique",
+          "Développement d'outils numériques (sites web, applications, outils de gestion)",
+          "Création et gestion des réseaux sociaux",
+          "Intégration de l'intelligence artificielle"
         ],
         objectives: [
           "Digitaliser votre entreprise",
@@ -254,25 +259,264 @@ const Publications = () => {
           "Utiliser l'intelligence artificielle"
         ],
         targetAudience: [
-          "TPME togolaises",
-          "Startups togolaises",
-          "Entrepreneurs en digitalisation"
+          "TPE, startups et PME togolaises à fort potentiel"
         ],
         sessions: [
-          { id: 1, dates: "Durée : 6 mois", time: "À définir", format: "Hybride" }
+          { id: 1, dates: "15 Mai 2026", time: "Date limite", format: "Candidature en ligne" }
+        ],
+        pricing: {
+          inscription: "Clôturé",
+          participation: "Clôturé"
+        },
+        contact: {
+          phone: "+228 93 31 83 59",
+          email: "Contact@bloc-des-innovateurs.org",
+          maxParticipants: 20
+        },
+        registrationUrl: "https://forms.gle/NcsHPhgvmM789Pzf7",
+        articleUrl: "https://drive.google.com/file/d/1prIWm2dvOTs8_eZFjf-CUC-ZTswDmDBN/view?usp=drivesdk",
+        deadline: "15 Mai 2026",
+        benefits: [
+          "20 entreprises accompagnées",
+          "20 solutions numériques fonctionnelles",
+          "1 réseau d'experts locaux mobilisé",
+          "Au moins 10 talents insérés professionnellement"
+        ]
+      }
+    },
+    {
+      id: 5,
+      title: "Falling Walls Lab Lomé 2026",
+      type: "Appel à candidatures",
+      color: "from-indigo-500 to-violet-500",
+      isTraining: true,
+      isEvent: true,
+      posterUrl: "/PHOTOS/falling-walls-lome.jpeg",
+      details: {
+        theme: "Falling Walls Lab Lomé 2026 – Présentez votre idée qui peut changer le monde",
+        description: "Vous êtes étudiant(e), jeune chercheur(se) ou innovateur(trice) avec une idée capable de changer le monde ? C'est le moment de passer à l'action ! Falling Walls Lab est un concours international unique où vous avez 3 minutes pour présenter votre projet innovant devant un jury d'experts.",
+        program: [
+          "Présentation de votre projet en 3 minutes devant un jury d'experts",
+          "Coaching et préparation au pitch",
+          "Ateliers de communication et de networking",
+          "Sélection des meilleurs projets pour la finale mondiale à Berlin"
+        ],
+        objectives: [
+          "Présentez votre idée à un jury de haut niveau",
+          "Gagnez en visibilité internationale",
+          "Développez vos compétences en communication",
+          "Élargissez votre réseau avec des profils interdisciplinaires",
+          "Tentez de remporter un voyage tous frais payés à Berlin pour la finale mondiale",
+          "Accédez au prestigieux Falling Walls Science Summit",
+          "Concourez pour le titre de Breakthrough Winner – Emerging Talents"
+        ],
+        targetAudience: [
+          "Étudiant(e)s",
+          "Jeunes chercheur(se)s",
+          "Innovateur(trice)s avec une idée capable de changer le monde"
+        ],
+        sessions: [
+          { id: 1, dates: "24-25 juillet 2026", time: "À définir", format: "Présentiel - Unipod, Lomé" }
         ],
         pricing: {
           inscription: "Gratuit",
           participation: "Gratuit"
         },
         contact: {
+          phone: "+228 90 00 00 00",
+          email: "lome@falling-walls.com",
+          maxParticipants: 0
+        },
+        registrationUrl: "https://falling-walls.com/falling-walls-lab-lome-togo",
+        deadline: "10 juillet 2026",
+        location: "Unipod, Lomé",
+        requirements: "Une bonne maîtrise de l'anglais à l'oral est recommandée",
+        benefits: [
+          "Voyage tous frais payés à Berlin (5–11 novembre)",
+          "Accès au Falling Walls Science Summit (6–9 novembre)",
+          "Programme exclusif : coaching, ateliers, networking",
+          "Concours pour le titre de Breakthrough Winner – Emerging Talents"
+        ]
+      }
+    },
+    {
+      id: 6,
+      title: "Formation Power BI",
+      type: "Formation",
+      color: "from-yellow-500 to-orange-500",
+      isTraining: true,
+      isEvent: false,
+      posterUrl: "/PHOTOS/formation-powerbi.jpeg",
+      details: {
+        theme: "FORMATION POWER BI – DE LA DONNÉE AU TABLEAU DE BORD",
+        description: "Vous souhaitez apprendre à transformer vos données en tableaux de bord interactifs et pertinents ? Rejoignez notre formation pratique sur Power BI et maîtrisez les étapes essentielles de la Business Intelligence.",
+        program: [
+          "Importation des données",
+          "Transformation et nettoyage des données",
+          "Modélisation des données",
+          "Création de graphiques et tableaux de bord interactifs",
+          "Publication des rapports et collaboration en ligne"
+        ],
+        objectives: [
+          "Maîtriser les étapes essentielles de la Business Intelligence",
+          "Développer vos compétences en analyse de données",
+          "Créer des visualisations de données professionnelles",
+          "Publier et partager vos rapports en ligne"
+        ],
+        targetAudience: [
+          "Débutants en Business Intelligence",
+          "Analystes de données",
+          "Professionnels souhaitant valoriser leurs données",
+          "Toute personne motivée, sans prérequis technique"
+        ],
+        sessions: [
+          { id: 1, dates: "10-15 Juin 2026", time: "À définir", format: "En ligne & en présentiel" }
+        ],
+        pricing: {
+          inscription: "Terminé",
+          participation: "Terminé"
+        },
+        contact: {
           phone: "+228 93 31 83 59",
           email: "blocdesinnovateurs@gmail.com",
-          maxParticipants: 20
+          maxParticipants: 15
         },
-        registrationUrl: "https://docs.google.com/forms/d/e/1FAIpQLSdQRHcigN27QtpZ5A8v38UH5SQjSwk5JX08HqAEWmyGJ9A8qg/viewform?usp=header",
-        articleUrl: "https://drive.google.com/file/d/1prIWm2dvOTs8_eZFjf-CUC-ZTswDmDBN/view?usp=drivesdk",
-        deadline: "15 mai 2026"
+        registrationUrl: "https://forms.gle/WKp8BiAA8vpC1ArX6"
+      }
+    },
+    {
+      id: 7,
+      title: "Formation Excel pour les Professionnels",
+      type: "Formation Gratuite",
+      color: "from-blue-600 to-cyan-600",
+      isTraining: true,
+      isEvent: false,
+      posterUrl: "/PHOTOS/formation-excel.jpeg",
+      details: {
+        theme: "FORMATION GRATUITE - EXCEL POUR LES PROFESSIONNELS",
+        description: "Nous avons le plaisir de vous informer d'une Formation en Excel. Cette formation a pour objectif de vous permettre de maîtriser les fonctionnalités essentielles d'Excel, d'améliorer votre productivité et de faciliter le traitement de vos données au quotidien.",
+        program: [
+          "Les bases Excel",
+          "Formules & Fonctions",
+          "Mise en forme conditionnelle",
+          "Tableau croisé Dynamique"
+        ],
+        objectives: [
+          "Maîtriser les fonctionnalités essentielles d'Excel",
+          "Améliorer votre productivité",
+          "Faciliter le traitement de vos données au quotidien"
+        ],
+        targetAudience: [
+          "Débutants",
+          "Utilisateurs d'Excel souhaitant renforcer leurs compétences",
+          "Professionnels"
+        ],
+        sessions: [
+          { id: 1, dates: "02 Mai 2026", time: "10H-13H GMT", format: "En ligne sur Google Meet" }
+        ],
+        pricing: {
+          inscription: "Gratuit",
+          participation: "Gratuit"
+        },
+        contact: {
+          phone: "",
+          email: "contact@bloc-des-innovateurs.org",
+          maxParticipants: 0
+        },
+        registrationUrl: "https://forms.gle/bUp8SFAzhSt9SpFGA",
+        trainer: "Papa Lat C. SECK - Expert en Suivi-Évaluation et Apprentissage",
+        location: "En ligne sur Google Meet",
+        additionalInfo: "Le lien de la formation sera envoyé par mail"
+      }
+    },
+    // ✅ ÉVÉNEMENT 8 : Sortie Détente - Boma Beach (PASSÉ)
+    {
+      id: 8,
+      title: "Sortie Détente - Boma Beach",
+      type: "Événement",
+      color: "from-teal-400 to-blue-500",
+      isTraining: false,
+      isEvent: true,
+      posterUrl: "/PHOTOS/sortie-detente-boma.jpeg",
+      details: {
+        theme: "Les innovations technologiques à nos jours, quel impact dans la vie des entrepreneurs et la souveraineté de notre société ?",
+        description: "Après les projets, les formations, les réunions et les deadlines… il faut aussi penser à souffler un peu  Le BDI vous embarque pour un moment de détente, d'échanges et de bonne humeur autour d'un thème super intéressant.",
+        program: [
+          "Moment de détente et de convivialité",
+          "Échanges sur l'impact des innovations technologiques",
+          "Networking entre innovateurs",
+          "Partage d'expériences et d'idées"
+        ],
+        objectives: [
+          "Apprendre et discuter dans une ambiance détendue",
+          "Se détendre et profiter d'une bonne ambiance entre innovateurs",
+          "Échanger sur les enjeux technologiques actuels"
+        ],
+        targetAudience: [
+          "Membres du BDI",
+          "Passionnés d'innovation",
+          "Entrepreneurs et professionnels du numérique"
+        ],
+        sessions: [
+          { id: 1, dates: "27 Mai 2026", time: "14H GMT", format: "Présentiel - Boma Beach, Avépozo" }
+        ],
+        pricing: {
+          inscription: "5000 FCFA",
+          participation: "5000 FCFA"
+        },
+        contact: {
+          phone: "Tmoney: +228 93-27-06-77 | Flooz: +228 99-29-77-58",
+          email: "",
+          maxParticipants: 0
+        },
+        location: "Boma Beach, Avépozo",
+        paymentInfo: "Les membres souhaitant participer peuvent envoyer leur contribution via Tmoney: (+228) 93-27-06-77 ou Flooz: (+228) 99-29-77-58"
+      }
+    },
+    // ✅ ÉVÉNEMENT 9 : Rencontre Mensuelle des Membres (PASSÉ)
+    {
+      id: 9,
+      title: "Rencontre Mensuelle des Membres",
+      type: "Rencontre",
+      color: "from-purple-500 to-pink-500",
+      isTraining: false,
+      isEvent: true,
+      posterUrl: "/PHOTOS/rencontre-mensuelle.png",
+      details: {
+        theme: "Rencontre mensuelle avec les membres du BDI",
+        description: "Chaque nouvelle rencontre est une nouvelle occasion de grandir ensemble. Le Bloc des Innovateurs vous donne rendez-vous pour sa rencontre mensuelle avec les membres. Nous aurons l'occasion de nous retrouver, d'accueillir les nouveaux membres, de partager nos expériences et d'échanger autour des projets et ambitions qui font vivre notre communauté.",
+        program: [
+          "Accueil des nouveaux membres",
+          "Partage d'expériences",
+          "Échanges sur les projets et ambitions",
+          "Présentation de l'association",
+          "Découverte des opportunités"
+        ],
+        objectives: [
+          "Rencontrer d'autres passionnés d'innovation",
+          "Mieux connaître l'association",
+          "Découvrir les opportunités qui s'offrent à vous",
+          "Partager un moment d'apprentissage et de convivialité"
+        ],
+        targetAudience: [
+          "Nouvel adhérent",
+          "Membre de longue date",
+          "Passionnés d'innovation"
+        ],
+        sessions: [
+          { id: 1, dates: "27 Juin 2026", time: "14H00", format: "Présentiel" }
+        ],
+        pricing: {
+          inscription: "Gratuit",
+          participation: "Gratuit"
+        },
+        contact: {
+          phone: "",
+          email: "",
+          maxParticipants: 0
+        },
+        registrationUrl: "https://docs.google.com/forms/d/e/1FAIpQLSdq93fIXMhrQTjIdeyGEyRRZnK7Ldcj1sq6FHsUlJj_W3LcSQ/viewform?usp=publish-editor",
+        additionalInfo: "Nous avons hâte de vous retrouver pour un moment de partage, d'apprentissage et de convivialité. À très bientôt ! "
       }
     }
   ];
@@ -301,8 +545,9 @@ const Publications = () => {
     return () => observer.disconnect();
   }, []);
 
+  // ✅ CORRECTION : Accepte les formations ET les événements
   const openTraining = (pub: any) => {
-    if (pub.isTraining) {
+    if (pub.isTraining || pub.isEvent) {
       setSelectedTraining(pub);
       document.body.style.overflow = 'hidden';
     }
@@ -422,7 +667,7 @@ const Publications = () => {
                   
                   {/* BOUTONS */}
                   <div className="flex flex-col gap-3">
-                    {/* Bouton Lire → TrainingModal */}
+                    {/* Bouton Lire → TrainingModal ou PDF */}
                     <Button 
                       className={`w-full bg-gradient-to-r ${publication.color} hover:opacity-90 transition-opacity text-sm font-medium py-2.5`}
                       onClick={() => handleReadClick(publication)}
@@ -432,7 +677,7 @@ const Publications = () => {
                       {readButton.isExternal && <ExternalLink className="w-3 h-3 ml-1 opacity-70" />}
                     </Button>
                     
-                    {/* Bouton S'inscrire → Google Forms */}
+                    {/* Bouton S'inscrire → Caché si statut = passé */}
                     {publication.details?.registrationUrl && status.status !== 'past' && (
                       <Button 
                         variant="outline"
@@ -452,8 +697,8 @@ const Publications = () => {
 
       </div>
 
-      {/* TrainingModal */}
-      {selectedTraining?.isTraining && (
+      {/* TrainingModal - Accepte formations ET événements */}
+      {(selectedTraining?.isTraining || selectedTraining?.isEvent) && (
         <TrainingModal
           isOpen={!!selectedTraining}
           onClose={closeTraining}
